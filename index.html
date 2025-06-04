@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>8x8 グリッド × 10 + 行データ表示</title>
+  <title>8x8 グリッド × 10（長押し塗りつぶし付き）</title>
   <style>
     body {
       font-family: sans-serif;
@@ -40,12 +40,20 @@
   </style>
 </head>
 <body>
-  <h1>8×8 のマスが10個 + 各行の状態表示</h1>
+  <h1>8×8 のマスが10個 + 各行の状態表示（塗りつぶし対応）</h1>
 
   <div id="container"></div>
 
   <script>
     const container = document.getElementById("container");
+    let isMouseDown = false;
+
+    document.addEventListener("mousedown", () => {
+      isMouseDown = true;
+    });
+    document.addEventListener("mouseup", () => {
+      isMouseDown = false;
+    });
 
     for (let i = 0; i < 10; i++) {
       const wrapper = document.createElement("div");
@@ -64,17 +72,25 @@
         for (let x = 0; x < 8; x++) {
           const cell = document.createElement("div");
           cell.className = "cell";
-          cell.addEventListener("click", () => {
+
+          cell.addEventListener("mousedown", () => {
             cell.classList.toggle("black");
             updateRowDisplay();
           });
+
+          cell.addEventListener("mouseover", () => {
+            if (isMouseDown) {
+              cell.classList.add("black"); // toggle にしたいなら変更可能
+              updateRowDisplay();
+            }
+          });
+
           board.appendChild(cell);
           row.push(cell);
         }
         cells.push(row);
       }
 
-      // 表示更新用関数
       function updateRowDisplay() {
         rowData.innerHTML = '';
         for (let y = 0; y < 8; y++) {
@@ -85,7 +101,6 @@
         }
       }
 
-      // 初期表示
       updateRowDisplay();
 
       wrapper.appendChild(board);
