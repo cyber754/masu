@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>8x8 グリッド × 10 + 行データ表示</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+    }
+    .board-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin: 20px;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(8, 30px);
+      grid-template-rows: repeat(8, 30px);
+      gap: 2px;
+    }
+    .cell {
+      width: 30px;
+      height: 30px;
+      background-color: white;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .cell.black {
+      background-color: black;
+    }
+    .row-data {
+      margin-left: 20px;
+      font-family: monospace;
+      text-align: left;
+      line-height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>8×8 のマスが10個 + 各行の状態表示</h1>
+
+  <div id="container"></div>
+
+  <script>
+    const container = document.getElementById("container");
+
+    for (let i = 0; i < 10; i++) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "board-wrapper";
+
+      const board = document.createElement("div");
+      board.className = "board";
+
+      const rowData = document.createElement("div");
+      rowData.className = "row-data";
+
+      const cells = [];
+
+      for (let y = 0; y < 8; y++) {
+        const row = [];
+        for (let x = 0; x < 8; x++) {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.addEventListener("click", () => {
+            cell.classList.toggle("black");
+            updateRowDisplay();
+          });
+          board.appendChild(cell);
+          row.push(cell);
+        }
+        cells.push(row);
+      }
+
+      // 表示更新用関数
+      function updateRowDisplay() {
+        rowData.innerHTML = '';
+        for (let y = 0; y < 8; y++) {
+          const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+          const line = document.createElement("div");
+          line.textContent = bits;
+          rowData.appendChild(line);
+        }
+      }
+
+      // 初期表示
+      updateRowDisplay();
+
+      wrapper.appendChild(board);
+      wrapper.appendChild(rowData);
+      container.appendChild(wrapper);
+    }
+  </script>
+</body>
+</html>
