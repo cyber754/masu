@@ -2,242 +2,122 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>3×3配置の8x8マス + セクションタイトル付き + エキストラ</title>
+  <title>補助ページ</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f0f0f0;
+      background-color: #f0f0f0;
       text-align: center;
+    }
+    .title {
+      font-size: 24px;
       margin: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .section-title {
-      font-size: 28px;
       font-weight: bold;
-      margin: 40px 0 10px;
-      color: #333;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
     }
     .grid-container {
-      display: grid;
-      grid-template-columns: repeat(3, auto);
-      gap: 30px;
-      justify-content: center;
-      margin-bottom: 40px;
-    }
-    .board-wrapper {
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
     }
-    .board {
+    .grid {
       display: grid;
+      grid-template-columns: repeat(8, 20px);
+      grid-template-rows: repeat(8, 20px);
       gap: 2px;
-    }
-    .board.size-8 {
-      grid-template-columns: repeat(8, 30px);
-      grid-template-rows: repeat(8, 30px);
-    }
-    .board.size-16 {
-      grid-template-columns: repeat(16, 20px);
-      grid-template-rows: repeat(16, 20px);
+      background-color: white;
+      padding: 10px;
     }
     .cell {
-      background-color: white;
-      border: 1px solid #ccc;
-      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #aaa;
+      box-sizing: border-box;
     }
-    .cell.black {
-      background-color: black;
+    .hex-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
-    .row-data {
-    margin-left: 15px;
-    font-family: monospace;
-    text-align: left;
-    line-height: 30px;
-    font-size: 26px;
-    padding-top: 10px; /* ← 上に少し余白を足して調整 */
+    .hex-label {
+      text-align: right;
+      font-weight: bold;
+      margin-bottom: 4px;
+      align-self: flex-end;
     }
-
-    .row-data.large {
-      font-size: 22px;
-      line-height: 26px;
-    }
-    .spacer {
-      height: 600px;
-      background: url("dot_character.png") center/contain no-repeat;
-      margin: 50px 0;
+    .hex-line {
+      font-family: monospace;
     }
   </style>
 </head>
 <body>
-  <h1>8×8 のマス（3×3配置）+ 暗号ラベル付き</h1>
-  <div id="container"></div>
-
-  <script>
-    const container = document.getElementById("container");
-    let isMouseDown = false;
-
-    document.addEventListener("mousedown", () => isMouseDown = true);
-    document.addEventListener("mouseup", () => isMouseDown = false);
-
-    const sectionTitles = ["暗号X", "暗号Y", "暗号Z"];
-
-    // 3x3 セクション
-    for (let section = 0; section < 3; section++) {
-      const title = document.createElement("div");
-      title.className = "section-title";
-      title.textContent = sectionTitles[section];
-      container.appendChild(title);
-
-      const grid = document.createElement("div");
-      grid.className = "grid-container";
-
-
-      for (let i = 0; i < 3; i++) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "board-wrapper";
-
-        const board = document.createElement("div");
-        board.className = "board size-8";
-
-        const rowData = document.createElement("div");
-        rowData.className = "row-data";
-
-        const cells = [];
-        for (let y = 0; y < 8; y++) {
-          const row = [];
-          for (let x = 0; x < 8; x++) {
+  <div class="title">補助ページ</div>
+  <div class="container">
+    <!-- 左側のマスと値 -->
+    <div class="grid-container">
+      <div class="grid">
+        <!-- 8x8 マス -->
+        <!-- JSで生成も可。ここでは静的で例示 -->
+        <!-- 64 cells -->
+        <!-- 略 -->
+        <script>
+          const leftGrid = document.currentScript.parentElement;
+          for (let i = 0; i < 64; i++) {
             const cell = document.createElement("div");
             cell.className = "cell";
-            cell.style.width = '30px';
-            cell.style.height = '30px';
-
-            cell.addEventListener("mousedown", () => {
-              cell.classList.toggle("black");
-              updateRowDisplay();
-            });
-
-            cell.addEventListener("mouseover", () => {
-              if (isMouseDown) {
-                cell.classList.add("black");
-                updateRowDisplay();
-              }
-            });
-
-            board.appendChild(cell);
-            row.push(cell);
+            leftGrid.appendChild(cell);
           }
-          cells.push(row);
-        }
+        </script>
+      </div>
+    </div>
 
-        function updateRowDisplay() {
-          rowData.innerHTML = '';
-          for (let y = 0; y < 8; y++) {
-            const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
-            const line = document.createElement("div");
-            line.textContent = bits;
-            rowData.appendChild(line);
+    <!-- 中央のラベルと値 -->
+    <div class="hex-block">
+      <div class="hex-label">16進数</div>
+      <div id="center-hex"></div>
+    </div>
+
+    <!-- 右側のマスと値 -->
+    <div class="grid-container">
+      <div class="grid">
+        <script>
+          const rightGrid = document.currentScript.parentElement;
+          for (let i = 0; i < 64; i++) {
+            const cell = document.createElement("div");
+            cell.className = "cell";
+            rightGrid.appendChild(cell);
           }
-        }
+        </script>
+      </div>
+    </div>
 
-        updateRowDisplay();
+    <!-- 右側の値 -->
+    <div class="hex-block">
+      <div class="hex-label">16進数</div>
+      <div id="right-hex"></div>
+    </div>
+  </div>
 
-        wrapper.appendChild(board);
-        wrapper.appendChild(rowData);
-        grid.appendChild(wrapper);
-      }
-      container.appendChild(grid);
+  <script>
+    const hexValues = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
+    const centerHex = document.getElementById("center-hex");
+    const rightHex = document.getElementById("right-hex");
+
+    for (let i = 0; i < hexValues.length; i++) {
+      const line = document.createElement("div");
+      line.className = "hex-line";
+      line.textContent = `00000000　　${hexValues[i]}`;
+      centerHex.appendChild(line);
+
+      const lineR = document.createElement("div");
+      lineR.className = "hex-line";
+      lineR.textContent = `${"00000000　　"}`;
+      rightHex.appendChild(lineR);
     }
-
-    // スペーサー + イラスト（画像）
-    const extraSpacer = document.createElement("div");
-    extraSpacer.className = "spacer";
-    container.appendChild(extraSpacer);
-
-    // エキストラタイトル
-    // エキストラタイトル
-const extraTitle = document.createElement("div");
-extraTitle.className = "section-title";
-extraTitle.textContent = "えきすとら（クリアページの）";
-container.appendChild(extraTitle);
-
-// エキストラ 8x8盤面 × 2 に変更
-const extraGrid = document.createElement("div");
-extraGrid.className = "grid-container";
-extraGrid.style.gridTemplateColumns = 'repeat(2, auto)';
-
-for (let i = 0; i < 2; i++) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "board-wrapper";
-
-  const board = document.createElement("div");
-  board.className = "board size-8";
-
-  const rowData = document.createElement("div");
-  rowData.className = "row-data";
-
-  const cells = [];
-  for (let y = 0; y < 8; y++) {
-    const row = [];
-    for (let x = 0; x < 8; x++) {
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      cell.style.width = '30px';
-      cell.style.height = '30px';
-
-      cell.addEventListener("mousedown", () => {
-        cell.classList.toggle("black");
-        updateRowDisplay();
-      });
-
-      cell.addEventListener("mouseover", () => {
-        if (isMouseDown) {
-          cell.classList.add("black");
-          updateRowDisplay();
-        }
-      });
-
-      board.appendChild(cell);
-      row.push(cell);
-    }
-    cells.push(row);
-  }
-
-  const hexLabels = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
-
-function updateRowDisplay() {
-  rowData.innerHTML = '';
-
-  // 1段目：16進数ラベル行
-  // 16進数ラベルを先に作成
-const hexLabel = document.createElement("div");
-hexLabel.textContent = "16進数";
-hexLabel.style.textAlign = "right";
-hexLabel.style.fontWeight = "bold";
-hexLabel.style.fontSize = "20px";
-hexLabel.style.marginBottom = "60px";  // ← ここで「1段上」に配置
-rowData.appendChild(hexLabel);
-
-// そのあとに8行分の2進数 + 16進数を追加
-const hexValues = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
-for (let y = 0; y < 8; y++) {
-  const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
-  const line = document.createElement("div");
-  line.textContent = `${bits}　　${hexValues[y]}`;
-  rowData.appendChild(line);
-}
-
-}
-
-  updateRowDisplay();
-  wrapper.appendChild(board);
-  wrapper.appendChild(rowData);
-  extraGrid.appendChild(wrapper);
-}
-
-container.appendChild(extraGrid);
-
   </script>
 </body>
 </html>
