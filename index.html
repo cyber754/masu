@@ -208,28 +208,30 @@ for (let i = 0; i < 2; i++) {
   const hexLabels = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
 
   if (i === 0) {
-    // 最上段に「16進数」見出しを右寄せ気味に表示
+    // 上に「16進数」見出しを右寄せ表示
     const header = document.createElement("div");
-    header.style.textAlign = "right";
-    header.textContent = "16進数";
+    header.innerHTML = `<span style="display:inline-block; width: 100px;"></span>
+                        <span style="display:inline-block; width: 120px; text-align: right; font-weight: bold;">16進数</span>`;
     rowData.appendChild(header);
   }
 
   for (let y = 0; y < 8; y++) {
     const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+
     const line = document.createElement("div");
 
     if (i === 0) {
-      // 左側 extra ボードにだけ16進数を表示
-      line.innerHTML = `<span style="display:inline-block; width: 140px; text-align:left;">${bits}</span><span style="margin-left:10px;">${hexLabels[y]}</span>`;
+      // 左側だけ 2進数 + 16進数 を表示
+      line.innerHTML = `<span style="display:inline-block; width: 100px; font-family: monospace;">${bits}</span>
+                        <span style="display:inline-block; width: 120px;">${hexLabels[y]}</span>`;
     } else {
+      // 右側は2進数だけ
       line.textContent = bits;
     }
 
     rowData.appendChild(line);
   }
 }
-
 
 
   updateRowDisplay();
