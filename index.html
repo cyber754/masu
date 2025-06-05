@@ -58,12 +58,12 @@
       font-size: 18px;
     }
     .row-data.small {
-      line-height: 20px;
-      font-size: 14px;
+      line-height: 24px;
+      font-size: 20px;
     }
     .spacer {
       height: 600px;
-        background: url("/dot_character.png") center/contain no-repeat;
+      background: url("/dot_character.png") center/contain no-repeat;
       margin: 50px 0;
     }
   </style>
@@ -167,7 +167,7 @@
       board.className = "board size-16";
 
       const rowData = document.createElement("div");
-      rowData.className = "row-data small";
+      rowData.className = "row-data"; // ここからsmallクラスを削除
 
       const cells = [];
       for (let y = 0; y < 16; y++) {
