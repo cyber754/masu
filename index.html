@@ -81,7 +81,8 @@
 
     const sectionTitles = ["暗号X", "暗号Y", "暗号Z"];
 
-    for (let section = 0; section < sectionTitles.length; section++) {
+    // 3x3 セクション
+    for (let section = 0; section < 3; section++) {
       const title = document.createElement("div");
       title.className = "section-title";
       title.textContent = sectionTitles[section];
