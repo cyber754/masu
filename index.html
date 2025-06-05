@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>3×3配置の8x8マス + セクションタイトル付き</title>
+  <title>盤面表示＋えきすとら</title>
   <style>
     body {
       font-family: sans-serif;
@@ -19,10 +19,23 @@
       margin: 40px 0 10px;
       color: #333;
     }
+    .extra-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #b30000;
+      margin: 60px 0 20px;
+    }
     .grid-container {
       display: grid;
       grid-template-columns: repeat(3, auto);
       gap: 30px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .extra-grid {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      gap: 50px;
       justify-content: center;
       margin-bottom: 40px;
     }
@@ -32,13 +45,11 @@
     }
     .board {
       display: grid;
-      grid-template-columns: repeat(8, 30px);
-      grid-template-rows: repeat(8, 30px);
       gap: 2px;
     }
     .cell {
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
       background-color: white;
       border: 1px solid #ccc;
       cursor: pointer;
@@ -50,89 +61,112 @@
       margin-left: 15px;
       font-family: monospace;
       text-align: left;
-      line-height: 30px;
-      font-size: 18px; /* 2進数表示の文字サイズを大きく */
+      line-height: 24px;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <h1>8×8 のマス（3×3配置）+ 暗号ラベル付き</h1>
+  <h1>マスのページ</h1>
   <div id="container"></div>
 
   <script>
     const container = document.getElementById("container");
     let isMouseDown = false;
-
     document.addEventListener("mousedown", () => isMouseDown = true);
     document.addEventListener("mouseup", () => isMouseDown = false);
 
     const sectionTitles = ["暗号X", "暗号Y", "暗号Z"];
 
+    // 3×3 の 8×8 盤面表示
     for (let section = 0; section < 3; section++) {
-      // セクションタイトル
       const title = document.createElement("div");
       title.className = "section-title";
       title.textContent = sectionTitles[section];
       container.appendChild(title);
 
-      // このセクションに3つの盤面
       const grid = document.createElement("div");
       grid.className = "grid-container";
 
       for (let i = 0; i < 3; i++) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "board-wrapper";
-
-        const board = document.createElement("div");
-        board.className = "board";
-
-        const rowData = document.createElement("div");
-        rowData.className = "row-data";
-
-        const cells = [];
-
-        for (let y = 0; y < 8; y++) {
-          const row = [];
-          for (let x = 0; x < 8; x++) {
-            const cell = document.createElement("div");
-            cell.className = "cell";
-
-            cell.addEventListener("mousedown", () => {
-              cell.classList.toggle("black");
-              updateRowDisplay();
-            });
-
-            cell.addEventListener("mouseover", () => {
-              if (isMouseDown) {
-                cell.classList.add("black");
-                updateRowDisplay();
-              }
-            });
-
-            board.appendChild(cell);
-            row.push(cell);
-          }
-          cells.push(row);
-        }
-
-        function updateRowDisplay() {
-          rowData.innerHTML = '';
-          for (let y = 0; y < 8; y++) {
-            const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
-            const line = document.createElement("div");
-            line.textContent = bits;
-            rowData.appendChild(line);
-          }
-        }
-
-        updateRowDisplay();
-
-        wrapper.appendChild(board);
-        wrapper.appendChild(rowData);
-        grid.appendChild(wrapper);
+        createBoard(grid, 8, 8);
       }
 
       container.appendChild(grid);
+    }
+
+    <div style="text-align: center; margin-top: 100px; margin-bottom: 100px;">
+    <img src="dot_character.png" alt="ドットキャラクター" style="image-rendering: pixelated; width: 150px; height: auto;">
+    </div>
+
+    // えきすとらタイトル
+    const extraTitle = document.createElement("div");
+    extraTitle.className = "extra-title";
+    extraTitle.textContent = "えきすとら";
+    container.appendChild(extraTitle);
+
+    // 16×16盤面を2つ並べる
+    const extraGrid = document.createElement("div");
+    extraGrid.className = "extra-grid";
+    for (let i = 0; i < 2; i++) {
+      createBoard(extraGrid, 16, 16);
+    }
+    container.appendChild(extraGrid);
+
+    // 盤面を生成する共通関数
+    function createBoard(parent, rows, cols) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "board-wrapper";
+
+      const board = document.createElement("div");
+      board.className = "board";
+      board.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      board.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
+      const rowData = document.createElement("div");
+      rowData.className = "row-data";
+
+      const cells = [];
+
+      for (let y = 0; y < rows; y++) {
+        const row = [];
+        for (let x = 0; x < cols; x++) {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+
+          cell.addEventListener("mousedown", () => {
+            cell.classList.toggle("black");
+            updateRowDisplay();
+          });
+
+          cell.addEventListener("mouseover", () => {
+            if (isMouseDown) {
+              cell.classList.add("black");
+              updateRowDisplay();
+            }
+          });
+
+          board.appendChild(cell);
+          row.push(cell);
+        }
+        cells.push(row);
+      }
+
+      function updateRowDisplay() {
+        rowData.innerHTML = '';
+        for (let y = 0; y < rows; y++) {
+          const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+          const line = document.createElement("div");
+          line.textContent = bits;
+          rowData.appendChild(line);
+        }
+      }
+
+      updateRowDisplay();
+
+      wrapper.appendChild(board);
+      wrapper.appendChild(rowData);
+      parent.appendChild(wrapper);
     }
   </script>
 </body>
