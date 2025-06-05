@@ -203,14 +203,27 @@ for (let i = 0; i < 2; i++) {
   }
 
   function updateRowDisplay() {
-    rowData.innerHTML = '';
-    for (let y = 0; y < 8; y++) {
-      const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
-      const line = document.createElement("div");
+  rowData.innerHTML = '';
+
+  // 表示用の16進数ラベル
+  const hexLabels = ["16進数", "18", "30", "FF", "20", "60", "5F", "44", "DF"];
+
+  for (let y = 0; y < 8; y++) {
+    const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+    const line = document.createElement("div");
+
+    // 1つ目のボード（i === 0）のときのみ16進数ラベルを付ける
+    if (i === 0) {
+      line.textContent = bits + "　" + hexLabels[y];
+    } else {
       line.textContent = bits;
-      rowData.appendChild(line);
     }
+
+    rowData.appendChild(line);
   }
+}
+
+    }
 
   updateRowDisplay();
   wrapper.appendChild(board);
