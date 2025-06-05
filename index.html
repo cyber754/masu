@@ -206,23 +206,32 @@ for (let i = 0; i < 2; i++) {
   rowData.innerHTML = '';
 
   // 表示用の16進数ラベル
-  const hexLabels = ["16進数", "18", "30", "FF", "20", "60", "5F", "44", "DF"];
+  const hexLabels = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
 
-  for (let y = 0; y < 8; y++) {
-    const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+  for (let y = -1; y < 8; y++) {
     const line = document.createElement("div");
 
-    // 1つ目のボード（i === 0）のときのみ16進数ラベルを付ける
     if (i === 0) {
-      line.textContent = bits + "　" + hexLabels[y];
+      // 最上段に「16進数」
+      if (y === -1) {
+        line.textContent = "　　　　　16進数"; // 表示位置を合わせるため全角空白
+      } else {
+        const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+        line.textContent = bits + "　" + hexLabels[y];
+      }
     } else {
-      line.textContent = bits;
+      if (y >= 0) {
+        const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+        line.textContent = bits;
+      }
     }
 
-    rowData.appendChild(line);
+    if (y >= -1) {
+      rowData.appendChild(line);
+    }
   }
+}
 
-    }
 
   updateRowDisplay();
   wrapper.appendChild(board);
