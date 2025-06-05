@@ -51,12 +51,14 @@
       background-color: black;
     }
     .row-data {
-      margin-left: 15px;
-      font-family: monospace;
-      text-align: left;
-      line-height: 30px;
-      font-size: 26px;
+    margin-left: 15px;
+    font-family: monospace;
+    text-align: left;
+    line-height: 30px;
+    font-size: 26px;
+    padding-top: 10px; /* ← 上に少し余白を足して調整 */
     }
+
     .row-data.large {
       font-size: 22px;
       line-height: 26px;
@@ -208,11 +210,13 @@ for (let i = 0; i < 2; i++) {
   const hexLabels = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
 
   if (i === 0) {
-    // 行1行分の高さを使って「16進数」ラベルを上にずらす
+    // 「16進数」タイトル行を追加
     const header = document.createElement("div");
-    header.innerHTML = `<span style="display:inline-block; width: 100px;"></span>
-                        <span style="display:inline-block; width: 120px; text-align: right; font-weight: bold;">16進数</span>`;
-    header.style.lineHeight = "30px"; // 行の高さに合わせる
+    header.textContent = "16進数";
+    header.style.textAlign = "right";
+    header.style.fontWeight = "bold";
+    header.style.fontSize = "20px";
+    header.style.marginBottom = "4px";
     rowData.appendChild(header);
   }
 
@@ -221,18 +225,15 @@ for (let i = 0; i < 2; i++) {
     const line = document.createElement("div");
 
     if (i === 0) {
-      // 左側の盤面だけ：2進数 + 16進数
-      line.innerHTML = `<span style="display:inline-block; width: 100px; font-family: monospace;">${bits}</span>
-                        <span style="display:inline-block; width: 120px;">${hexLabels[y]}</span>`;
+      line.innerHTML = `<span style="display:inline-block; width: 110px; font-family: monospace;">${bits}</span>
+                        <span style="display:inline-block; width: 60px;">${hexLabels[y]}</span>`;
     } else {
-      // 右側の盤面は2進数だけ
       line.textContent = bits;
     }
 
     rowData.appendChild(line);
   }
 }
-
 
   updateRowDisplay();
   wrapper.appendChild(board);
