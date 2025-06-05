@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>3×3配置の8x8マス + セクションタイトル付き + エキストラ</title>
+  <title>補助ページ</title>
   <style>
     body {
       font-family: sans-serif;
@@ -61,7 +61,7 @@
   </style>
 </head>
 <body>
-  <h1>8×8 のマス（3×3配置）+ 暗号ラベル付き</h1>
+  <h1>補助ページ</h1>
   <div id="container"></div>
 
   <script>
@@ -144,12 +144,12 @@
 
     const extraTitle = document.createElement("div");
     extraTitle.className = "section-title";
-    extraTitle.textContent = "えきすとら（クリアページの）";
+    extraTitle.textContent = "えきすとら（クリアページの「回答」）";
     container.appendChild(extraTitle);
 
     const fixedHexValues = [
       ["18", "30", "4F", "22", "3C", "7D", "11", "5A"],
-      ["99", "A1", "B2", "C3", "D4", "E5", "F6", "FF"]
+      ["8", "8", "E", "C3", "8", "8", "8", "7F"]
     ];
 
     const extraGrid = document.createElement("div");
@@ -170,7 +170,7 @@
       hexLabel.style.textAlign = "right";
       hexLabel.style.fontWeight = "bold";
       hexLabel.style.marginBottom = "4px";
-      hexLabel.textContent = "　　　　　　　　　　　　　16進数";
+      hexLabel.textContent = "16進数";
       rowData.appendChild(hexLabel);
 
       const cells = [];
