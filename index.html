@@ -210,22 +210,24 @@ function updateRowDisplay() {
   rowData.innerHTML = '';
 
   // 1段目：16進数ラベル行
-  const label = document.createElement("div");
-label.textContent = "16進数";
-label.style.textAlign = "right";
-label.style.fontWeight = "bold";
-label.style.fontSize = "20px";
-label.style.marginBottom = "-4px";  // ← これを追加！
-rowData.appendChild(label);
+  // 16進数ラベルを先に作成
+const hexLabel = document.createElement("div");
+hexLabel.textContent = "16進数";
+hexLabel.style.textAlign = "right";
+hexLabel.style.fontWeight = "bold";
+hexLabel.style.fontSize = "20px";
+hexLabel.style.marginBottom = "6px";  // ← ここで「1段上」に配置
+rowData.appendChild(hexLabel);
 
+// そのあとに8行分の2進数 + 16進数を追加
+const hexValues = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
+for (let y = 0; y < 8; y++) {
+  const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+  const line = document.createElement("div");
+  line.textContent = `${bits}　　${hexValues[y]}`;
+  rowData.appendChild(line);
+}
 
-  // 2段目以降：ビット＋対応する16進数
-  for (let y = 0; y < 8; y++) {
-    const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
-    const line = document.createElement("div");
-    line.textContent = bits + "   " + hexLabels[y]; // ← 右にスペースと16進数
-    rowData.appendChild(line);
-  }
 }
 
   updateRowDisplay();
