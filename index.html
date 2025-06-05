@@ -79,7 +79,7 @@
     document.addEventListener("mousedown", () => isMouseDown = true);
     document.addEventListener("mouseup", () => isMouseDown = false);
 
-    const sectionTitles = ["暗号X", "暗号Y", "暗号Z"];
+    const sectionTitles = ["暗号X", "暗号Y"];
 
     // 3x3 セクション
     for (let section = 0; section < 3; section++) {
@@ -91,7 +91,7 @@
       const grid = document.createElement("div");
       grid.className = "grid-container";
 
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < ２; i++) {
         const wrapper = document.createElement("div");
         wrapper.className = "board-wrapper";
 
