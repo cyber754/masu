@@ -204,33 +204,25 @@ for (let i = 0; i < 2; i++) {
     cells.push(row);
   }
 
-  function updateRowDisplay() {
-  rowData.innerHTML = '';
-
   const hexLabels = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
 
-  if (i === 0) {
-    // 「16進数」タイトル行を追加
-    const header = document.createElement("div");
-    header.textContent = "16進数";
-    header.style.textAlign = "right";
-    header.style.fontWeight = "bold";
-    header.style.fontSize = "20px";
-    header.style.marginBottom = "4px";
-    rowData.appendChild(header);
-  }
+function updateRowDisplay() {
+  rowData.innerHTML = '';
 
+  // 1段目：16進数ラベル行
+  const label = document.createElement("div");
+  label.textContent = "16進数";
+  label.style.textAlign = "right";
+  label.style.fontWeight = "bold";
+  label.style.fontSize = "20px";
+  label.style.height = "30px";
+  rowData.appendChild(label);
+
+  // 2段目以降：ビット＋対応する16進数
   for (let y = 0; y < 8; y++) {
     const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
     const line = document.createElement("div");
-
-    if (i === 0) {
-      line.innerHTML = `<span style="display:inline-block; width: 110px; font-family: monospace;">${bits}</span>
-                        <span style="display:inline-block; width: 60px;">${hexLabels[y]}</span>`;
-    } else {
-      line.textContent = bits;
-    }
-
+    line.textContent = bits + "   " + hexLabels[y]; // ← 右にスペースと16進数
     rowData.appendChild(line);
   }
 }
