@@ -53,14 +53,6 @@
       line-height: 30px;
       font-size: 26px;
     }
-    .hex-labels {
-      margin-left: 15px;
-      font-family: monospace;
-      text-align: left;
-      line-height: 30px;
-      transform: translateY(-18px);
-      font-size: 26px;
-    }
     .spacer {
       height: 600px;
       background: url("dot_character.png") center/contain no-repeat;
@@ -75,6 +67,7 @@
   <script>
     const container = document.getElementById("container");
     let isMouseDown = false;
+
     document.addEventListener("mousedown", () => isMouseDown = true);
     document.addEventListener("mouseup", () => isMouseDown = false);
 
@@ -137,6 +130,7 @@
         }
 
         updateRowDisplay();
+
         wrapper.appendChild(board);
         wrapper.appendChild(rowData);
         grid.appendChild(wrapper);
@@ -153,11 +147,14 @@
     extraTitle.textContent = "えきすとら（クリアページの）";
     container.appendChild(extraTitle);
 
+    const fixedHexValues = [
+      ["18", "30", "4F", "22", "3C", "7D", "11", "5A"],
+      ["99", "A1", "B2", "C3", "D4", "E5", "F6", "FF"]
+    ];
+
     const extraGrid = document.createElement("div");
     extraGrid.className = "grid-container";
     extraGrid.style.gridTemplateColumns = 'repeat(2, auto)';
-
-    const hexRows = ["18", "30", "FF", "20", "60", "5F", "44", "DF"];
 
     for (let i = 0; i < 2; i++) {
       const wrapper = document.createElement("div");
@@ -166,12 +163,15 @@
       const board = document.createElement("div");
       board.className = "board size-8";
 
-      const hexLabels = document.createElement("div");
-      hexLabels.className = "hex-labels";
+      const rowData = document.createElement("div");
+      rowData.className = "row-data";
 
-      const title = document.createElement("div");
-      title.textContent = "16進数";
-      hexLabels.appendChild(title);
+      const hexLabel = document.createElement("div");
+      hexLabel.style.textAlign = "right";
+      hexLabel.style.fontWeight = "bold";
+      hexLabel.style.marginBottom = "4px";
+      hexLabel.textContent = "　　　　　　　　　　　　　16進数";
+      rowData.appendChild(hexLabel);
 
       const cells = [];
       for (let y = 0; y < 8; y++) {
@@ -184,11 +184,13 @@
 
           cell.addEventListener("mousedown", () => {
             cell.classList.toggle("black");
+            updateRowDisplay();
           });
 
           cell.addEventListener("mouseover", () => {
             if (isMouseDown) {
               cell.classList.add("black");
+              updateRowDisplay();
             }
           });
 
@@ -196,14 +198,23 @@
           row.push(cell);
         }
         cells.push(row);
-
-        const label = document.createElement("div");
-        label.textContent = `00000000   ${hexRows[y]}`;
-        hexLabels.appendChild(label);
       }
 
+      function updateRowDisplay() {
+        while (rowData.children.length > 1) {
+          rowData.removeChild(rowData.lastChild);
+        }
+        for (let y = 0; y < 8; y++) {
+          const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+          const line = document.createElement("div");
+          line.textContent = `${bits}   ${fixedHexValues[i][y]}`;
+          rowData.appendChild(line);
+        }
+      }
+
+      updateRowDisplay();
       wrapper.appendChild(board);
-      wrapper.appendChild(hexLabels);
+      wrapper.appendChild(rowData);
       extraGrid.appendChild(wrapper);
     }
 
