@@ -211,12 +211,13 @@ function updateRowDisplay() {
 
   // 1段目：16進数ラベル行
   const label = document.createElement("div");
-  label.textContent = "16進数";
-  label.style.textAlign = "right";
-  label.style.fontWeight = "bold";
-  label.style.fontSize = "20px";
-  label.style.height = "30px";
-  rowData.appendChild(label);
+label.textContent = "16進数";
+label.style.textAlign = "right";
+label.style.fontWeight = "bold";
+label.style.fontSize = "20px";
+label.style.marginBottom = "-4px";  // ← これを追加！
+rowData.appendChild(label);
+
 
   // 2段目以降：ビット＋対応する16進数
   for (let y = 0; y < 8; y++) {
