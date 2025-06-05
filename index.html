@@ -1,173 +1,175 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>盤面表示</title>
+  <meta charset="UTF-8" />
+  <title>マス塗り問題</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f0f0f0;
       text-align: center;
-      margin: 20px;
+      background-color: #f0f0f0;
     }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .section-title {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 40px 0 10px;
-      color: #333;
-    }
-    .extra-title {
-      font-size: 32px;
-      font-weight: bold;
-      color: #b30000;
-      margin: 60px 0 20px;
-    }
-    .grid-container {
+    .grid-wrapper {
       display: grid;
       grid-template-columns: repeat(3, auto);
-      gap: 30px;
+      gap: 40px;
       justify-content: center;
-      margin-bottom: 40px;
+      margin: 20px auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(8, 30px);
+      grid-template-rows: repeat(8, 30px);
+      gap: 2px;
+      margin-bottom: 10px;
+    }
+    .cell {
+      width: 30px;
+      height: 30px;
+      background-color: white;
+      border: 1px solid #aaa;
+      cursor: pointer;
+    }
+    .row-binary {
+      font-size: 18px;
+      font-family: monospace;
+      margin: 0;
+    }
+    .grid-set {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .section-label {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 50px 0 10px;
+    }
+    .extra-title {
+      font-size: 48px;
+      font-weight: bold;
+      margin-top: 100px;
     }
     .extra-grid {
       display: grid;
-      grid-template-columns: repeat(2, auto);
-      gap: 50px;
-      justify-content: center;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(16, 24px);
+      grid-template-rows: repeat(16, 24px);
+      gap: 1px;
+      margin: 20px auto;
     }
-    .board-wrapper {
-      display: flex;
-      align-items: flex-start;
-    }
-    .board {
-      display: grid;
-      gap: 2px;
-    }
-    .cell {
+    .extra-cell {
       width: 24px;
       height: 24px;
       background-color: white;
-      border: 1px solid #ccc;
+      border: 1px solid #999;
       cursor: pointer;
-    }
-    .cell.black {
-      background-color: black;
-    }
-    .row-data {
-      margin-left: 15px;
-      font-family: monospace;
-      text-align: left;
-      line-height: 24px;
-      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <h1>盤面表示</h1>
-  <div id="container"></div>
 
-  <script>
-    const container = document.getElementById("container");
-    let isMouseDown = false;
-    document.addEventListener("mousedown", () => isMouseDown = true);
-    document.addEventListener("mouseup", () => isMouseDown = false);
+  <!-- 暗号X -->
+  <div class="section-label">暗号X</div>
+  <div class="grid-wrapper">
+    <!-- 3グリッド -->
+    <script>
+      const grids = 9;
+      for (let g = 0; g < 9; g++) {
+        if (g === 3) document.write('</div><div class="section-label">暗号Y</div><div class="grid-wrapper">');
+        if (g === 6) document.write('</div><div class="section-label">暗号Z</div><div class="grid-wrapper">');
 
-    const sectionTitles = ["暗号X", "暗号Y", "暗号Z"];
-
-    // 3×3 の 8×8 盤面表示
-    for (let section = 0; section < 3; section++) {
-      const title = document.createElement("div");
-      title.className = "section-title";
-      title.textContent = sectionTitles[section];
-      container.appendChild(title);
-
-      const grid = document.createElement("div");
-      grid.className = "grid-container";
-
-      for (let i = 0; i < 3; i++) {
-        createBoard(grid, 8, 8);
+        document.write('<div class="grid-set">');
+        document.write('<div class="grid" id="grid' + g + '">');
+        for (let i = 0; i < 64; i++) {
+          document.write('<div class="cell" data-row="' + Math.floor(i / 8) + '"></div>');
+        }
+        document.write('</div>');
+        for (let row = 0; row < 8; row++) {
+          document.write('<p class="row-binary" id="binary' + g + '-' + row + '">00000000</p>');
+        }
+        document.write('</div>');
       }
+    </script>
+  </div>
 
-      container.appendChild(grid);
-    }
+  <!-- ドットキャラ画像 -->
+  <div style="text-align: center; margin-top: 100px; margin-bottom: 80px;">
+    <img src="dot_character_transparent.png" alt="ドットキャラ" 
+         style="image-rendering: pixelated; width: 150px; height: auto;">
+  </div>
 
-    <div style="text-align: center; margin-top: 100px; margin-bottom: 100px;">
-    <img src="dot_character.png" alt="ドットキャラクター" style="image-rendering: pixelated; width: 150px; height: auto;">
+  <!-- えきすとら -->
+  <div class="extra-title">えきすとら</div>
+
+  <!-- 16×16 グリッド2つ -->
+  <div class="grid-wrapper" style="grid-template-columns: repeat(2, auto);">
+    <div class="extra-grid" id="extra1">
+      <!-- 256 cells -->
+      <script>
+        for (let i = 0; i < 256; i++) {
+          document.write('<div class="extra-cell"></div>');
+        }
+      </script>
     </div>
+    <div class="extra-grid" id="extra2">
+      <script>
+        for (let i = 0; i < 256; i++) {
+          document.write('<div class="extra-cell"></div>');
+        }
+      </script>
+    </div>
+  </div>
 
-    // えきすとらタイトル
-    const extraTitle = document.createElement("div");
-    extraTitle.className = "extra-title";
-    extraTitle.textContent = "えきすとら";
-    container.appendChild(extraTitle);
+  <!-- スクリプト部分 -->
+  <script>
+    // クリック or ドラッグ対応
+    let isMouseDown = false;
 
-    // 16×16盤面を2つ並べる
-    const extraGrid = document.createElement("div");
-    extraGrid.className = "extra-grid";
-    for (let i = 0; i < 2; i++) {
-      createBoard(extraGrid, 16, 16);
+    document.addEventListener('mousedown', () => isMouseDown = true);
+    document.addEventListener('mouseup', () => isMouseDown = false);
+
+    document.querySelectorAll('.cell').forEach(cell => {
+      cell.addEventListener('mousedown', () => toggleCell(cell));
+      cell.addEventListener('mouseover', () => {
+        if (isMouseDown) toggleCell(cell);
+      });
+    });
+
+    function toggleCell(cell) {
+      const isBlack = cell.style.backgroundColor === 'black';
+      cell.style.backgroundColor = isBlack ? 'white' : 'black';
+      updateBinary(cell.closest('.grid'));
     }
-    container.appendChild(extraGrid);
 
-    // 盤面を生成する共通関数
-    function createBoard(parent, rows, cols) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "board-wrapper";
+    function updateBinary(grid) {
+      const gridId = grid.id;
+      const gridIndex = gridId.replace('grid', '');
+      const cells = grid.querySelectorAll('.cell');
 
-      const board = document.createElement("div");
-      board.className = "board";
-      board.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-      board.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+      let rows = Array(8).fill('');
+      cells.forEach((cell, i) => {
+        const row = Math.floor(i / 8);
+        rows[row] += cell.style.backgroundColor === 'black' ? '1' : '0';
+      });
 
-      const rowData = document.createElement("div");
-      rowData.className = "row-data";
+      rows.forEach((bin, r) => {
+        document.getElementById(`binary${gridIndex}-${r}`).textContent = bin;
+      });
+    }
 
-      const cells = [];
+    // extraセルも塗れるようにする
+    document.querySelectorAll('.extra-cell').forEach(cell => {
+      cell.addEventListener('mousedown', () => toggleExtra(cell));
+      cell.addEventListener('mouseover', () => {
+        if (isMouseDown) toggleExtra(cell);
+      });
+    });
 
-      for (let y = 0; y < rows; y++) {
-        const row = [];
-        for (let x = 0; x < cols; x++) {
-          const cell = document.createElement("div");
-          cell.className = "cell";
-
-          cell.addEventListener("mousedown", () => {
-            cell.classList.toggle("black");
-            updateRowDisplay();
-          });
-
-          cell.addEventListener("mouseover", () => {
-            if (isMouseDown) {
-              cell.classList.add("black");
-              updateRowDisplay();
-            }
-          });
-
-          board.appendChild(cell);
-          row.push(cell);
-        }
-        cells.push(row);
-      }
-
-      function updateRowDisplay() {
-        rowData.innerHTML = '';
-        for (let y = 0; y < rows; y++) {
-          const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
-          const line = document.createElement("div");
-          line.textContent = bits;
-          rowData.appendChild(line);
-        }
-      }
-
-      updateRowDisplay();
-
-      wrapper.appendChild(board);
-      wrapper.appendChild(rowData);
-      parent.appendChild(wrapper);
+    function toggleExtra(cell) {
+      const isBlack = cell.style.backgroundColor === 'black';
+      cell.style.backgroundColor = isBlack ? 'white' : 'black';
     }
   </script>
+
 </body>
 </html>
