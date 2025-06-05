@@ -2,18 +2,33 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>8x8 グリッド</title>
+  <title>3×3配置の8x8マス + セクションタイトル付き</title>
   <style>
     body {
       font-family: sans-serif;
       background: #f0f0f0;
       text-align: center;
+      margin: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 40px 0 10px;
+      color: #333;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 30px;
+      justify-content: center;
+      margin-bottom: 40px;
     }
     .board-wrapper {
       display: flex;
-      justify-content: center;
       align-items: flex-start;
-      margin: 20px;
     }
     .board {
       display: grid;
@@ -32,80 +47,92 @@
       background-color: black;
     }
     .row-data {
-      margin-left: 20px;
+      margin-left: 15px;
       font-family: monospace;
       text-align: left;
       line-height: 30px;
+      font-size: 18px; /* 2進数表示の文字サイズを大きく */
     }
   </style>
 </head>
 <body>
-  <h1>8×8 のマスが10個 + 各行の状態表示（塗りつぶし対応）</h1>
-
+  <h1>8×8 のマス（3×3配置）+ 暗号ラベル付き</h1>
   <div id="container"></div>
 
   <script>
     const container = document.getElementById("container");
     let isMouseDown = false;
 
-    document.addEventListener("mousedown", () => {
-      isMouseDown = true;
-    });
-    document.addEventListener("mouseup", () => {
-      isMouseDown = false;
-    });
+    document.addEventListener("mousedown", () => isMouseDown = true);
+    document.addEventListener("mouseup", () => isMouseDown = false);
 
-    for (let i = 0; i < 10; i++) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "board-wrapper";
+    const sectionTitles = ["暗号X", "暗号Y", "暗号Z"];
 
-      const board = document.createElement("div");
-      board.className = "board";
+    for (let section = 0; section < 3; section++) {
+      // セクションタイトル
+      const title = document.createElement("div");
+      title.className = "section-title";
+      title.textContent = sectionTitles[section];
+      container.appendChild(title);
 
-      const rowData = document.createElement("div");
-      rowData.className = "row-data";
+      // このセクションに3つの盤面
+      const grid = document.createElement("div");
+      grid.className = "grid-container";
 
-      const cells = [];
+      for (let i = 0; i < 3; i++) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "board-wrapper";
 
-      for (let y = 0; y < 8; y++) {
-        const row = [];
-        for (let x = 0; x < 8; x++) {
-          const cell = document.createElement("div");
-          cell.className = "cell";
+        const board = document.createElement("div");
+        board.className = "board";
 
-          cell.addEventListener("mousedown", () => {
-            cell.classList.toggle("black");
-            updateRowDisplay();
-          });
+        const rowData = document.createElement("div");
+        rowData.className = "row-data";
 
-          cell.addEventListener("mouseover", () => {
-            if (isMouseDown) {
-              cell.classList.add("black"); // toggle にしたいなら変更可能
-              updateRowDisplay();
-            }
-          });
+        const cells = [];
 
-          board.appendChild(cell);
-          row.push(cell);
-        }
-        cells.push(row);
-      }
-
-      function updateRowDisplay() {
-        rowData.innerHTML = '';
         for (let y = 0; y < 8; y++) {
-          const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
-          const line = document.createElement("div");
-          line.textContent = bits;
-          rowData.appendChild(line);
+          const row = [];
+          for (let x = 0; x < 8; x++) {
+            const cell = document.createElement("div");
+            cell.className = "cell";
+
+            cell.addEventListener("mousedown", () => {
+              cell.classList.toggle("black");
+              updateRowDisplay();
+            });
+
+            cell.addEventListener("mouseover", () => {
+              if (isMouseDown) {
+                cell.classList.add("black");
+                updateRowDisplay();
+              }
+            });
+
+            board.appendChild(cell);
+            row.push(cell);
+          }
+          cells.push(row);
         }
+
+        function updateRowDisplay() {
+          rowData.innerHTML = '';
+          for (let y = 0; y < 8; y++) {
+            const bits = cells[y].map(c => c.classList.contains("black") ? "1" : "0").join("");
+            const line = document.createElement("div");
+            line.textContent = bits;
+            rowData.appendChild(line);
+          }
+        }
+
+        updateRowDisplay();
+
+        wrapper.appendChild(board);
+        wrapper.appendChild(rowData);
+        grid.appendChild(wrapper);
       }
 
-      updateRowDisplay();
-
-      wrapper.appendChild(board);
-      wrapper.appendChild(rowData);
-      container.appendChild(wrapper);
+      container.appendChild(grid);
     }
   </script>
 </body>
